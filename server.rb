@@ -10,10 +10,10 @@ require 'yaml'
 require 'securerandom'
 
 $stdout.sync = true
-$default_branch_name = "JIRA-BOT-BRANCH"
+$default_branch_name = "VSTS-BOT-BRANCH"
 
 begin
-  yml = File.open('jira-bot.yaml')
+  yml = File.open('vsts-bot.yaml')
   contents = YAML.load(yml)
 
   GITHUB_CLIENT_ID = contents["client_id"]
@@ -77,7 +77,7 @@ end
 
 # GitHub will include `installation_id` after installing the App
 get '/post_app_install' do
-  # Send the user back to JIRA
+  # Send the user back to VSTS
   if !session[:referrer].nil? && session[:referrer] != ''
     redirect session[:referrer]
   end
@@ -85,11 +85,10 @@ get '/post_app_install' do
   redirect to('/')
 end
 
-# Entry point for JIRA Add-on.
-# JIRA passes in a number of URL parameters https://goo.gl/zyGLiF
+# Entry point for VSTS Add-on.
 get '/main_entry' do
   # Used in templates to load JS and CSS
-  session[:fqdn] = params[:xdm_e].nil? ? "" : params[:xdm_e]
+  session[:fqdn] = "" # TODO
   session[:referrer] = request.referer
 
   # JIRA ID is passed as context-parameters.
@@ -198,9 +197,6 @@ get '/add_repo' do
   redirect to('/')
 end
 
-
-# JIRA session methods
-# -----------------
 
 # Returns true if the user completed OAuth2 handshake and has a token
 def authenticated?
