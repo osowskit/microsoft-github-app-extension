@@ -93,14 +93,14 @@ get '/main_entry' do
 
   # JIRA ID is passed as context-parameters.
   # Referenced in atlassian-connect.json
-  session[:jira_issue] = params.fetch("issueKey", $default_branch_name)
+  session[:work_item] = params.fetch("issueKey", $default_branch_name)
   redirect to('/')
 end
 
 # Main application logic
 get '/' do
-  if session[:jira_issue].nil?
-    session[:jira_issue] = $default_branch_name
+  if session[:work_item].nil?
+    session[:work_item] = $default_branch_name
   end
 
   # Need user's OAuth token to lookup installation id
@@ -121,13 +121,13 @@ get '/' do
     return erb :show_repos
   else
 
-    if branch_exists?(session[:jira_issue])
+    if branch_exists?(session[:work_item])
 
       return erb :link_to_branch
     end
 
     # Authenticated but not viewing JIRA ticket
-    if session[:jira_issue] == $default_branch_name
+    if session[:work_item] == $default_branch_name
       return erb :thank_you
     end
 
@@ -159,14 +159,14 @@ end
 
 # Create a branch for the selected repository if it doesn't already exist.
 get '/create_branch' do
-  if !set_repo? || branch_exists?(session[:jira_issue])
+  if !set_repo? || branch_exists?(session[:work_item])
     redirect to('/')
   end
   app_token = get_app_token(session[:repo_name][:installation_id])
   client = Octokit::Client.new(:access_token => app_token )
 
   repo_name = session[:repo_name][:full_name]
-  branch_name = session[:jira_issue]
+  branch_name = session[:work_item]
   begin
     # Create branch at tip of master
     sha = client.ref(repo_name, "heads/master")[:object][:sha]
@@ -209,13 +209,13 @@ def set_repo?
 end
 
 # Returns whether a branch for this issue already exists
-def branch_exists?(jira_issue)
+def branch_exists?(work_item)
 
   app_token = get_app_token(session[:repo_name][:installation_id])
   client = Octokit::Client.new(:access_token => app_token)
 
   repo_name = session[:repo_name][:full_name]
-  branch_name = jira_issue
+  branch_name = work_item
 
   begin
     # Does this branch exist
