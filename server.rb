@@ -192,7 +192,6 @@ get '/add_repo' do
   session[:name_list].each do |repository_name|
     if input_repo == repository_name[:full_name]
       session[:repo_name] = repository_name
-      send_event("plugin", "selected", "repo")
       break
     end
   end
@@ -233,7 +232,7 @@ end
 
 def get_event_session_id
   if session[:user_session_id].nil? || session[:user_session_id] == ''
-    session[:user_session_id] = SecureRandom.hex(8)
+    session[:user_session_id] = SecureRandom.uuid()
   end
   session[:user_session_id]
 end
@@ -316,7 +315,6 @@ def get_app_token(installation_id)
   begin
     response = RestClient.post(token_url,{},headers)
     app_token = JSON.parse(response)
-    send_event("plugin", "create", "app_access_token")
     return_val = app_token["token"]
   rescue => error
     puts "app_access_token #{error}"
