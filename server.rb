@@ -88,11 +88,12 @@ end
 # Entry point for VSTS Add-on.
 get '/main_entry' do
   # Used in templates to load JS and CSS
-  session[:fqdn] = "" # TODO
+  session[:fqdn] = request.host
   session[:referrer] = request.referer
 
   # JIRA ID is passed as context-parameters.
   # 
+  session[:work_item] = params.fetch("id", $default_branch_name)
   #session[:work_item] = params.fetch("issueKey", $default_branch_name)
   redirect to('/')
 end
