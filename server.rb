@@ -47,15 +47,15 @@ configure do
 end
 
 before do
-  response.headers['Access-Control-Allow-Origin'] = 'https://*.atlassian.net'
+  response.headers['Access-Control-Allow-Origin'] = 'https://*.visualstudio.com'
 end
 
 options "*" do
   response.headers["Allow"] = "GET, POST, OPTIONS"
   response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type, Accept, X-User-Email, X-Auth-Token"
   response.headers["Access-Control-Allow-Origin"] = "*"
-  response.headers["X-Content-Security-Policy"] = "frame-ancestors https://*.atlassian.net";
-  response.headers["Content-Security-Policy"] = "frame-ancestors https://*.atlassian.net";
+  response.headers["X-Content-Security-Policy"] = "frame-ancestors https://*.visualstudio.com";
+  response.headers["Content-Security-Policy"] = "frame-ancestors https://*.visualstudio.com";
   200
 end
 
@@ -92,8 +92,8 @@ get '/main_entry' do
   session[:referrer] = request.referer
 
   # JIRA ID is passed as context-parameters.
-  # Referenced in atlassian-connect.json
-  session[:work_item] = params.fetch("issueKey", $default_branch_name)
+  # 
+  #session[:work_item] = params.fetch("issueKey", $default_branch_name)
   redirect to('/')
 end
 
@@ -126,7 +126,7 @@ get '/' do
       return erb :link_to_branch
     end
 
-    # Authenticated but not viewing JIRA ticket
+    # Authenticated but not viewing VSTS work item
     if session[:work_item] == $default_branch_name
       return erb :thank_you
     end
@@ -203,7 +203,7 @@ def authenticated?
   !session[:access_token].nil? && session[:access_token] != ''
 end
 
-# Returns whether the user selected a repository to map to this JIRA project
+# Returns whether the user selected a repository to map to this VSTS project
 def set_repo?
   !session[:repo_name].nil? && session[:repo_name] != ''
 end
