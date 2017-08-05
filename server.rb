@@ -90,11 +90,13 @@ get '/main_entry' do
   # Used in templates to load JS and CSS
   session[:fqdn] = request.host
   session[:referrer] = request.referer
+  puts "fqdn #{session[:fqdn]}"
 
   # JIRA ID is passed as context-parameters.
   # 
   session[:work_item] = params.fetch("id", $default_branch_name)
-  #session[:work_item] = params.fetch("issueKey", $default_branch_name)
+  puts "Work item #{session[:work_item]}"
+  
   redirect to('/')
 end
 
