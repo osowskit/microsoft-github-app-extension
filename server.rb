@@ -88,11 +88,13 @@ end
 # Entry point for VSTS Add-on.
 get '/main_entry' do
   session[:referrer] = request.referer
-  puts "request #{request.query_string.to_s}"
-  
+  puts "request #{request.query_string}"
+  puts "request #{request.fullpath}"
+  puts "referer #{request.referer}"
+  puts "request val at #{request.values_at('id')}"
   # JIRA ID is passed as context-parameters.
   # 
-  session[:work_item] = request.query_string.fetch("id", $default_branch_name)
+  #session[:work_item] = request.query_string.fetch("id", $default_branch_name)
   puts "my work item #{session[:work_item]}"
   
   redirect to('/')
