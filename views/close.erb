@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <!-- VSS Framework --> 
+    <script src="VSS.SDK.min.js"></script> 
+    <script>
+    window.onunload = function() {
+      var win = window.opener;
+      if (!win.closed) {
+          win.someFunctionToCallWhenPopUpCloses();
+      }
+    };
+    window.close();
+    </script>
+    <title>GitHub Branch Selector</title>
+</head>
+   <body>
+     <script>
+         VSS.init({
+             explicitNotifyLoaded: false,
+             usePlatformScripts: false
+         });
+    </script>
+      <div class="ac-content">
+        <div class="github-dev-panel">
+          <div class="aui-message aui-message-info">
+              Thank you for Authenticating. Please close this window.
+          </div>
+       </div>
+    </div>
+   </body>
+</html>

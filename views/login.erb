@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <!-- VSS Framework --> 
+    <script src="VSS.SDK.min.js"></script> 
+    <script>
+      var oauthWindow;
+      function doAuthorization() {
+        var left =
+            window.screenX + (window.outerWidth / 2) - (this._popupWidth / 2);
+        var top =
+            window.screenY + (window.outerHeight / 2) - (this._popupHeight / 2);
+        var windowFeatures = 'width=' + this._popupWidth +
+            ',height=' + this._popupHeight +
+            ',top=' + top +
+            ',left=' + left +
+            ',location=no,toolbar=no,menubar=no';
+        oauthWindow = window.open("<%= @url %>", this.WINDOW_NAME, windowFeatures);
+        return false;
+      }
+      function someFunctionToCallWhenPopUpCloses() {
+        window.setTimeout(function() {
+          if (oauthWindow.closed) {
+            window.location.replace("/");
+            //alert("Pop-up definitely closed");
+          }
+        }, 1);
+      }
+    </script> 
+
+    <title>GitHub Branch Selector</title>
+</head>
+   <body>
+     <script>
+         VSS.init({
+             explicitNotifyLoaded: false,
+             usePlatformScripts: false
+         });
+    </script>
+      <div class="ac-content">
+        <div class="github-dev-panel">
+          <div class="aui-message aui-message-warning">
+            Please link VSTS with your GitHub account: <a href="javascript:doAuthorization()" id="github-authorization">Connect to GitHub</a>
+          </div>
+          <p><a href="/logout">clear settings</a></p>
+        </div>
+      </div>
+   </body>
+</html>
