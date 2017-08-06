@@ -72,7 +72,9 @@ get '/callback' do
   session_code = params[:code]
   result = Octokit.exchange_code_for_token(session_code, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET)
   session[:access_token] = result[:access_token]
-  redirect to('/')
+
+  return erb :close
+  #redirect to('/')
 end
 
 # GitHub will include `installation_id` after installing the App
@@ -107,7 +109,7 @@ get '/' do
   # Need user's OAuth token to lookup installation id
   if !authenticated?
     @url = client.authorize_url(GITHUB_CLIENT_ID)
-    return erb :authorize
+    return erb :login
   end
 
   if !set_repo?
