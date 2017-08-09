@@ -74,7 +74,7 @@ get '/callback' do
   session[:access_token] = result[:access_token]
 
   return erb :close
-  #redirect to('/')
+
 end
 
 # GitHub will include `installation_id` after installing the App
@@ -157,6 +157,7 @@ get '/logout' do
   session.delete(:name_list)
   session.delete(:app_token)
   session.delete(:access_token)
+  session.delete(:work_item)
   redirect to('/')
 end
 
